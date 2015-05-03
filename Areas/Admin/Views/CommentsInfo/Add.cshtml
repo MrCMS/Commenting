@@ -1,0 +1,25 @@
+﻿@model MrCMS.Web.Apps.Commenting.Entities.UserProfile.CommentsInfo
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutPopup.cshtml";
+}
+@using (Html.BeginForm("Add", "CommentsInfo", new { id = "" }, FormMethod.Post))
+{
+    <fieldset>
+        <legend>
+            Comments information
+            <span class="btn-group  display-inline  pull-right">
+                <input type="submit" class="btn-primary btn" value="Add Comments Info" />
+            </span>
+        </legend>
+        @Html.HiddenFor(info => info.User.Id)
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    @Html.LabelFor(info => info.Username)
+                    @Html.TextBoxFor(info => info.Username, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(info => info.Username)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+}

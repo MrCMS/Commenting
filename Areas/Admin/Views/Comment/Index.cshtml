@@ -1,0 +1,72 @@
+﻿@using MrCMS.Paging
+@using MrCMS.Web.Apps.Commenting.Entities
+@using MrCMS.Helpers
+@model MrCMS.Web.Apps.Commenting.Areas.Admin.Models.CommentSearchQuery
+
+@{
+    var comments = ViewData["results"] as IPagedList<Comment> ?? PagedList<Comment>.Empty;
+    var approvalOptions = ViewData["approval-options"] as List<SelectListItem> ?? new List<SelectListItem>();
+}
+@using (Html.BeginForm("Index", "Comment", FormMethod.Get))
+{
+    <fieldset>
+        <legend>
+            Comments
+            <span class="btn-group display-inline pull-right">
+                <input type="submit" class="btn btn-primary" value="Search" />
+            </span>
+        </legend>
+
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.LabelFor(query => query.ApprovalStatus)
+                <div class="form-group">
+                    @Html.DropDownListFor(query => query.ApprovalStatus, approvalOptions, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-xs-4">
+                @Html.LabelFor(query => query.Email)
+                <div class="form-group">
+                    @Html.TextBoxFor(query => query.Email, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-xs-4">
+                @Html.LabelFor(query => query.Message)
+                <div class="form-group">
+                    @Html.TextBoxFor(query => query.Message, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.LabelFor(query => query.DateFrom)
+                <div class="form-group">
+                    @Html.TextBoxFor(query => query.DateFrom, new { @class = "date-time-picker form-control" })
+                </div>
+            </div>
+            <div class="col-xs-4">
+                @Html.LabelFor(query => query.DateTo)
+                <div class="form-group">
+                    @Html.TextBoxFor(query => query.DateTo, new { @class = "date-time-picker form-control" })
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    @Html.LabelFor(query => query.Id)
+                    @Html.TextBoxFor(query => query.Id, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    if (comments.Any())
+    {
+        Html.RenderPartial("CommentList", comments.ToList());
+        @Html.Pager(comments, "Index", page => new { page })
+    }
+    else
+    {
+        <p>
+            There are currently no comments that match your search criteria.
+        </p>
+    }
+}

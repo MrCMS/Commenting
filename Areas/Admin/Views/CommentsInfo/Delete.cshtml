@@ -1,0 +1,14 @@
+﻿@model MrCMS.Web.Apps.Commenting.Entities.UserProfile.CommentsInfo
+@{ Layout = "~/Areas/Admin/Views/Shared/_LayoutPopup.cshtml";}
+@using (Html.BeginForm("Delete", "CommentsInfo", new { id = Model.Id }, FormMethod.Post, new { style = "display:inline;" }))
+{
+    <fieldset>
+        <legend>
+            Remove info
+            <span class="btn-group display-inline pull-right">
+                <input type="submit" class="btn btn-danger" value="Delete" />
+            </span>
+        </legend>
+        <p>Are you sure you want to delete this info? This will remove them as an author in the front end of the website.</p>
+    </fieldset>
+}

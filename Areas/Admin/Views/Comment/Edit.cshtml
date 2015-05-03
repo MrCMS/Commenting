@@ -1,0 +1,42 @@
+﻿@using MrCMS.Helpers
+@model MrCMS.Web.Apps.Commenting.Entities.Comment
+@{ Layout = "~/Areas/Admin/Views/Shared/_LayoutPopup.cshtml";}
+<fieldset>
+
+    @using (Html.BeginForm("Edit", "Comment", new { id = Model.Id }, FormMethod.Post))
+    {
+        @Html.ReturnToReferrer()
+        @Html.HiddenFor(x => x.Id)
+        <legend>
+            Edit comment
+            <span class="btn-group display-inline pull-right">
+                <input type="submit" class="btn btn-success" name="Save" value="Save" />
+            </span>
+        </legend>
+    
+        <div class="row">
+            <div class="col-sm-12">
+                <p>
+                    <b>Posted by: </b>
+                    @if (Model.User != null)
+                    {
+                        @Html.ActionLink(Model.Name, "Edit", "User", new { id = Model.User.Id }, new { target = "_blank" })
+                    }
+                    else
+                    {
+                        <text>
+                            @Model.Name (@Model.Email)
+                        </text>
+                    }
+                </p>
+                <p>
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.Message)
+                        @Html.TextAreaFor(x => x.Message, new { @class = "form-control", rows = "5" })
+                        @Html.ValidationMessageFor(x => x.Message)
+                    </div>
+                </p>
+            </div>
+        </div>
+    }
+</fieldset>

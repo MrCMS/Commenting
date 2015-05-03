@@ -1,0 +1,16 @@
+﻿@model MrCMS.Web.Apps.Commenting.Models.CommentingUserAccountModel
+
+@using (Html.BeginForm("UpdateUsername", "CommentingUserAccount", FormMethod.Post))
+{
+    @Html.HiddenFor(x => x.Id)
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.Username)
+                @Html.TextBoxFor(x => x.Username, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Username)
+            </div>
+            <input class="btn btn-primary" value="Save Username" type="submit" />
+        </div>
+    </div>
+}

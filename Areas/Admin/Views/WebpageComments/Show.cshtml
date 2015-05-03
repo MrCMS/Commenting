@@ -1,0 +1,20 @@
+﻿@using MrCMS.Web.Apps.Commenting.Entities
+@model MrCMS.Web.Apps.Commenting.Entities.CommentingInfo
+@{
+    var comments = ViewData["comments"] as IList<Comment> ?? new List<Comment>();
+}
+<div class="form-group">
+    @Html.LabelFor(info => info.CommentingEnabledStatus)
+    @Html.EnumDropDownListFor(info => info.CommentingEnabledStatus, new { @class = "form-control" })
+</div>
+
+@if (comments.Any())
+{
+    Html.RenderPartial("CommentList", comments);
+}
+else
+{
+    <p>
+        There are currently no comments against this page.
+    </p>
+}

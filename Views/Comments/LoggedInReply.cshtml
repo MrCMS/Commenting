@@ -1,0 +1,36 @@
+﻿@using MrCMS.Helpers
+@using MrCMS.Web
+@using MrCMS.Web.Apps.Commenting.Helpers
+@using MrCMS.Web.Apps.Core.Pages
+@using MrCMS.Website
+@model MrCMS.Web.Apps.Commenting.Models.LoggedInUserAddCommentModel
+@{
+    var username = CurrentRequestData.CurrentUser.GetCommentsInfo().Username;
+}
+@if (!string.IsNullOrWhiteSpace(username))
+{
+    <h4>Reply as <a href="@(UniquePageHelper.GetUrl<UserAccountPage>())">@username</a></h4>
+    using (Html.BeginForm("LoggedIn", "Comments", new { Model.WebpageId, Model.InReplyTo }, FormMethod.Post, new { @class = "add-comment" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Honeypot()
+        <div class="form-group">
+            @Html.TextAreaFor(model => model.Message, new { @class = "form-control inline-reply" })
+            @Html.ValidationMessageFor(model => model.Message)
+        </div>
+        <div class="row comments-notification">
+            <div class="col-sm-6">
+                @Html.InlineCheckboxFor(model => model.ReplyNotification)
+            </div>
+            <div class="col-sm-6 text-right">
+                <input type="submit" class="btn btn-primary" value="@Resource("Post")" />
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-danger" role="alert">
+        No commenting username, please create a username <a href="@(UniquePageHelper.GetUrl<UserAccountPage>())">here</a>.
+    </div>
+}

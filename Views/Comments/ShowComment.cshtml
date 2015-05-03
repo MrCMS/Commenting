@@ -1,0 +1,64 @@
+﻿@using MrCMS.Web.Apps.Commenting.Settings
+@using MrCMS.Website
+@model MrCMS.Web.Apps.Commenting.Entities.Comment
+@{
+    var depth = ViewData["depth"] is int ? (int)ViewData["depth"] : 1;
+    var maxDepth = SiteSettings<CommentingSettings>().MaxUINestingDepth;
+}
+<li class="post" data-post="true" itemprop="comment" itemscope itemtype="http://schema.org/UserComments">
+    <div class="padding-15 comment-background">
+        <div class="comment-container media-body media-body-comments">
+            <div class="comment-header line-height-30">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <p class="author line-height-30" itemprop="creator">
+                            <span><strong>@Model.Name</strong></span> - @Model.CreatedOn.ToString("g")
+                        </p>
+                    </div>
+                    <div class="col-sm-2 text-right">
+                        <ul class="list-inline comment-actions reply">
+                            <li><a data-show-hide-comment="true"><span class="glyphicon glyphicon-minus"></span></a></li>
+                            <li>
+                                @using (Html.BeginForm("Report", "CommentReporting", new { CommentId = Model.Id }, FormMethod.Post, new { @class = "inline" }))
+                                {
+                                    <a href="#" data-link-action="true"><span class="glyphicon glyphicon-flag"></span></a>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="comment-body">
+                <a name="@Model.Id"></a>
+                <p itemprop="commentText">
+                    @Html.Raw(Model.Message)
+                </p>
+            </div>
+            <div class="comment-footer">
+                <ul class="list-inline comment-actions" data-votes="@Model.Id">
+                    @{Html.RenderAction("Votes", "Comments", new { comment = Model });}
+                    @if (CurrentRequestData.CurrentUser != null || SiteSettings<CommentingSettings>().AllowGuestComments)
+                    {
+                        <li class="reply-container">
+                            <a class="btn btn-default reply" data-show-reply-to="@Model.Id">Reply</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="comment-post" data-reply-to="@Model.Id">
+                @{ Html.RenderAction("ReplyTo", "Comments", new { Model.Id });}
+            </div>
+        </div>
+    </div>
+
+    
+    @if (Model.Children.Any())
+    {
+        <ul class="media-list @(depth<maxDepth ? "child":"")">
+            @foreach (var comment in Model.Children.Where(comment => comment.Approved == true))
+            {
+                Html.RenderPartial("ShowComment", comment, new ViewDataDictionary { { "depth", depth + 1 } });
+            }
+        </ul>
+    }
+</li>

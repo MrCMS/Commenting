@@ -1,0 +1,84 @@
+﻿@model IList<MrCMS.Web.Apps.Commenting.Entities.Comment>
+
+<table class="table table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Webpage
+            </th>
+            <th>
+                By
+            </th>
+            <th>
+                Message
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var comment in Model)
+        {
+            <tr>
+                <td>@comment.Id</td>
+                <td>@comment.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    @if (comment.Webpage == null)
+                    {
+                        <text>-</text>
+                    }
+                    else
+                    {
+                        @Html.ActionLink(comment.Webpage.Name, "Edit", "Webpage", new {id = comment.Webpage.Id}, new {})
+                    }
+                </td>
+                <td>
+                    @if (comment.User != null)
+                    {
+                        @Html.ActionLink(comment.User.Name, "Edit", "User", new { id = comment.User.Id }, new { })
+                    }
+                    else
+                    {
+                        <text>
+                            @comment.Name (@comment.Email)
+                        </text>
+                    }
+                </td>
+                <td>
+                    @comment.MessageTruncated()
+                </td>
+                <td>
+                    @switch (comment.Approved)
+                    {
+                        case true:
+                            <text>Approved</text>
+                            break;
+                        case false:
+                            <text>Rejected</text>
+                            break;
+                        default:
+                            <text>Requires Approval</text>
+                            break;
+                    }
+                </td>
+                <td>
+                    <div class="btn-group">
+                        @Html.ActionLink("Show", "Show", "Comment", new { id = comment.Id }, new { @class = "btn btn-default btn-xs", data_toggle = "fb-modal" })
+                        @Html.ActionLink("Edit", "Edit", "Comment", new { id = comment.Id }, new { @class = "btn btn-default btn-xs", data_toggle = "fb-modal" })
+                        @Html.ActionLink("Delete", "Delete", "Comment", new { id = comment.Id }, new { @class = "btn btn-danger btn-xs", data_toggle = "fb-modal" })
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

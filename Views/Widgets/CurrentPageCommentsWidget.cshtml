@@ -1,0 +1,21 @@
+﻿@using MrCMS.Web.Apps.Commenting.Models
+@model MrCMS.Entities.Documents.Web.Webpage
+@{
+    var response = TempData["comment-response-info"] as ICommentResponseInfo;
+    ViewData["post-comment-info"] = response;
+}
+@if (Model != null)
+{
+    <div id="comments" data-comments-container="true" class="comments-container hidden-print">
+        @if (response != null && !string.IsNullOrWhiteSpace(response.Message))
+        {
+            <div class="margin-top-15">
+                <div role="alert" class="alert @(response.Type == CommentResponseType.Info ? "alert-info" : response.Type == CommentResponseType.Error ? "alert-danger" : "alert-success")">
+                    @response.Message
+                </div>
+            </div>
+        }
+        @{ Html.RenderAction("Add", "Comments", new {id = Model.Id}); }
+        @{ Html.RenderAction("Show", "Comments", new {id = Model.Id}); }
+    </div>
+}
