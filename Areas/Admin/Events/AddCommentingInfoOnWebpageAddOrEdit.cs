@@ -2,7 +2,7 @@
 using MrCMS.Events;
 using MrCMS.Web.Apps.Commenting.Services;
 
-namespace MrCMS.Web.Apps.Commenting.Events
+namespace MrCMS.Web.Apps.Commenting.Areas.Admin.Events
 {
     public class AddCommentingInfoOnWebpageAddOrEdit : IOnAdded<Webpage>, IOnUpdated<Webpage>
     {
