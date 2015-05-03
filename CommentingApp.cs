@@ -13,7 +13,7 @@ using Ninject;
 namespace MrCMS.Web.Apps.Commenting
 {
     public class CommentingApp : MrCMSApp
-    { 
+    {
         protected override void RegisterApp(MrCMSAppRegistrationContext context)
         {
             context.MapAreaRoute("Commenting admin controllers", "Admin", "Admin/Apps/Commenting/{controller}/{action}/{id}",
