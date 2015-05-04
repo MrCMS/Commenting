@@ -4,14 +4,14 @@
 
 @if (SiteSettings<CommentingSettings>().AllowVoting)
 {
-    <li>
+    <li class="comment-upvote">
         @using (Html.BeginForm("Upvote", "CommentVoting", new { CommentId = Model.Id }, FormMethod.Post, new { @class = "inline" }))
         {
             @Model.Upvotes()
             <a href="#" data-link-action="true"><span class="glyphicon glyphicon-chevron-up"></span></a>
         }
     </li>
-    <li>
+    <li class="comment-downvote">
         @using (Html.BeginForm("Downvote", "CommentVoting", new { CommentId = Model.Id }, FormMethod.Post, new { @class = "inline" }))
         {
             @Model.Downvotes()
