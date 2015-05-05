@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
-using System.Web.UI.WebControls;
+﻿using System.Web.Mvc;
 using MrCMS.Apps;
 using MrCMS.Web.Apps.Commenting.Areas.Admin.Controllers;
 using MrCMS.Web.Apps.Commenting.Controllers;
-using MrCMS.Web.Apps.Commenting.Entities;
-using MrCMS.Web.Apps.Commenting.Services;
-using NHibernate;
 using Ninject;
 
 namespace MrCMS.Web.Apps.Commenting
