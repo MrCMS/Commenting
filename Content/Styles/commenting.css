@@ -2,7 +2,10 @@
     font-size: 14px;
     width: 100%;
 }
+.padding-15 { padding: 15px;}
+.margin-bottom-15 { margin-bottom: 15px;}
 .media-list { width: 100%;}
+.line-height-30 { line-height: 30px;}
 #comments .media-list li { padding: 0;}
 .media-body-comments { display: block;width: 100%;}
 
@@ -17,7 +20,7 @@
 
     .comments-container .child {
         margin-left: 5%;
-        width: 90%;
+        width: 95%;
     }
     .comments-container .child > li {
         padding: 0;
@@ -30,8 +33,14 @@
 .comment-container {
 }
 .comment-container .comment-actions li {}
-    .comment-container .comment-actions li:nth-child(2) {
-        border-left: 1px solid #cccccc;padding-left: 5px;
+    .comment-container .comment-actions li.comment-upvote {
+        border-right: 1px solid #cccccc;
+        padding-right: 5px!important;
+
+    }
+
+    .comment-container .comment-actions li.comment-downvote {
+        padding-left: 5px!important;
     }
 
     .comment-container .comment-footer .comment-actions li:first-child {
@@ -43,6 +52,10 @@
         margin-bottom: 5px;
     }
     .comment-container .author span { font-size: 16px;}
+    
+.theme-background {background:#eaeaea;}
+.comment-background {background:#eaeaea;border-bottom: 1px solid #eaeaea;}
+.comments-container .child .comment-background { background: #f0f0f0;}
 
 .comments-container .btn {
     font-size: 11px;
@@ -149,7 +162,3 @@
 @media (max-width: 767px) {
     .comments-notification .text-right { text-align: left;}
 }
-
-.theme-background {background:#eaeaea;}
-.comment-background {background:#eaeaea;}
-.comments-container .child .comment-background { background: #f0f0f0;}

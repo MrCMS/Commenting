@@ -9,9 +9,10 @@ namespace MrCMS.Web.Apps.Commenting.Helpers
     {
         public static bool AreCommentsEnabled(this Webpage webpage, CommentingInfo commentingInfo, CommentingSettings settings)
         {
-            if (webpage == null || commentingInfo == null || settings == null)
+            if (webpage == null || settings == null)
                 return false;
-
+            
+            if (commentingInfo != null)
             if (commentingInfo.CommentingEnabledStatus != CommentingEnabledStatus.System)
             {
                 return commentingInfo.CommentingEnabledStatus == CommentingEnabledStatus.Enabled;
