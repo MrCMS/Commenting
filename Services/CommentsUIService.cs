@@ -1,4 +1,4 @@
-﻿using MrCMS.Entities.Documents.Web;
+using MrCMS.Entities.Documents.Web;
 using MrCMS.Entities.People;
 using MrCMS.Helpers;
 using MrCMS.Web.Apps.Commenting.Entities;
@@ -8,6 +8,7 @@ using MrCMS.Web.Apps.Commenting.Settings;
 using MrCMS.Web.Apps.Core.Models.RegisterAndLogin;
 using MrCMS.Website;
 using NHibernate;
+using MrCMS.Services.Resources;
 
 namespace MrCMS.Web.Apps.Commenting.Services
 {
@@ -16,12 +17,14 @@ namespace MrCMS.Web.Apps.Commenting.Services
         private readonly ISession _session;
         private readonly CommentingSettings _settings;
         private readonly IGetWebpageCommentingInfo _getWebpageCommentingInfo;
+        private readonly IStringResourceProvider _stringResourceProvider;
 
-        public CommentsUIService(CommentingSettings settings, IGetWebpageCommentingInfo getWebpageCommentingInfo, ISession session)
+        public CommentsUIService(CommentingSettings settings, IGetWebpageCommentingInfo getWebpageCommentingInfo, ISession session, IStringResourceProvider stringResourceProvider)
         {
             _settings = settings;
             _getWebpageCommentingInfo = getWebpageCommentingInfo;
             _session = session;
+            _stringResourceProvider = stringResourceProvider;
         }
 
         public CommentsViewInfo GetAddCommentsInfo(Webpage webpage)
@@ -189,8 +192,8 @@ namespace MrCMS.Web.Apps.Commenting.Services
                        Valid = true,
                        Pending = pending,
                        Message = pending
-                           ? _settings.CommentPendingApprovalMessage
-                           : _settings.CommentAddedMessage,
+                           ? _stringResourceProvider.GetValue(_settings.CommentPendingApprovalMessage)
+                           : _stringResourceProvider.GetValue(_settings.CommentAddedMessage),
                        RedirectUrl = "~/" + comment.Webpage.LiveUrlSegment
                    };
         }
