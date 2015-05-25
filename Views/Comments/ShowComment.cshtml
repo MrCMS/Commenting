@@ -40,7 +40,7 @@
                     @if (CurrentRequestData.CurrentUser != null || SiteSettings<CommentingSettings>().AllowGuestComments)
                     {
                         <li class="reply-container">
-                            <a class="btn btn-default reply" data-show-reply-to="@Model.Id">Reply</a>
+                            <a class="btn btn-default reply" data-show-reply-to="@Model.Id">@Resource("Reply")</a>
                         </li>
                     }
                 </ul>
