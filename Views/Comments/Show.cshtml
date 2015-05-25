@@ -1,11 +1,11 @@
 ﻿@model List<MrCMS.Web.Apps.Commenting.Entities.Comment>
 <div class="margin-top-15">
-    <h4>Comments</h4>
+    <h4>@Resource("Comments")</h4>
 </div>
 
 @if (!Model.Any())
 {
-    <p>No comments have been made yet.</p>
+    <p>@Resource("No comments have been made yet.")</p>
 }
 else
 {
