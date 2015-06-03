@@ -17,9 +17,6 @@ namespace MrCMS.Web.Apps.Commenting.Settings
             AllowVoting = true;
             NotifyCommentAddedEmail = string.Empty;
 
-            CommentAddedMessage = "Thanks for posting!";
-            CommentPendingApprovalMessage = "Thanks for posting! Your comment is pending approval by admins, and will be shown shortly.";
-
             MaxUINestingDepth = 3;
         }
 
@@ -39,9 +36,6 @@ namespace MrCMS.Web.Apps.Commenting.Settings
         //public int InitialNumberOfCommentsToShow { get; set; }
 
         public string AllowedPageTypes { get; set; }
-
-        public string CommentAddedMessage { get; set; }
-        public string CommentPendingApprovalMessage { get; set; }
 
         public IEnumerable<string> EmailsToNotify
         {

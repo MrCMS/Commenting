@@ -14,10 +14,12 @@ namespace MrCMS.Web.Apps.Commenting.Services
 {
     public class CommentsUIService : ICommentsUIService
     {
+        public const string PendingApprovalMessage = "Thanks for posting! Your comment is pending approval by admins, and will be shown shortly.";
         private readonly ISession _session;
         private readonly CommentingSettings _settings;
         private readonly IGetWebpageCommentingInfo _getWebpageCommentingInfo;
         private readonly IStringResourceProvider _stringResourceProvider;
+        public const string AddedMessage="Thanks for posting!";
 
         public CommentsUIService(CommentingSettings settings, IGetWebpageCommentingInfo getWebpageCommentingInfo, ISession session, IStringResourceProvider stringResourceProvider)
         {
@@ -192,8 +194,8 @@ namespace MrCMS.Web.Apps.Commenting.Services
                        Valid = true,
                        Pending = pending,
                        Message = pending
-                           ? _stringResourceProvider.GetValue(_settings.CommentPendingApprovalMessage)
-                           : _stringResourceProvider.GetValue(_settings.CommentAddedMessage),
+                           ? _stringResourceProvider.GetValue(PendingApprovalMessage)
+                           : _stringResourceProvider.GetValue(AddedMessage),
                        RedirectUrl = "~/" + comment.Webpage.LiveUrlSegment
                    };
         }
