@@ -10,7 +10,7 @@
 @if (!string.IsNullOrWhiteSpace(username))
 {
     <div class="padding-15 theme-background margin-bottom-15">
-        <h4>Comment as <a href="@(UniquePageHelper.GetUrl<UserAccountPage>())">@username</a> </h4>
+        <h4>@Resource("Comment as") <a href="@(UniquePageHelper.GetUrl<UserAccountPage>())">@username</a> </h4>
         @using (Html.BeginForm("LoggedIn", "Comments", new { Model.WebpageId }, FormMethod.Post, new { @class = "add-comment" }))
         {
             @Html.AntiForgeryToken()
@@ -35,6 +35,6 @@
 else
 {
     <div class="alert alert-danger" role="alert">
-        No commenting username, please create a username <a href="@(UniquePageHelper.GetUrl<UserAccountPage>())">here</a>.
+        @Resource("No commenting username, please create a username.") <a href="@(UniquePageHelper.GetUrl<UserAccountPage>())">@Resource("here")</a>
     </div>
 }
