@@ -1,5 +1,6 @@
-﻿using System.Web.Mvc;
+using System.Web.Mvc;
 using MrCMS.Services;
+using MrCMS.Services.Resources;
 using MrCMS.Web.Apps.Commenting.Helpers;
 using MrCMS.Web.Apps.Commenting.Models;
 using MrCMS.Web.Apps.Commenting.Services;
@@ -13,13 +14,14 @@ namespace MrCMS.Web.Apps.Commenting.Controllers
         private readonly IUniqueUsernameService _uniqueUsernameService;
         private readonly IUniquePageService _uniquePageService;
         private readonly ICommentInfoUiService _commentInfoUiService;
+        private readonly IStringResourceProvider _stringResourceProvider;
 
-        public CommentingUserAccountController(IUniqueUsernameService uniqueUsernameService, 
-            IUniquePageService uniquePageService, ICommentInfoUiService commentInfoUiService)
+        public CommentingUserAccountController(IUniqueUsernameService uniqueUsernameService, IUniquePageService uniquePageService, ICommentInfoUiService commentInfoUiService, IStringResourceProvider stringResourceProvider)
         {
             _uniqueUsernameService = uniqueUsernameService;
             _uniquePageService = uniquePageService;
             _commentInfoUiService = commentInfoUiService;
+            _stringResourceProvider = stringResourceProvider;
         }
 
         [HttpGet]
@@ -47,11 +49,11 @@ namespace MrCMS.Web.Apps.Commenting.Controllers
             if (ModelState.IsValid)
             {
                 _commentInfoUiService.Save(model);
-                model.Message = "Username successfully updated.";
+                model.Message = _stringResourceProvider.GetValue("Commenting App - Username successfully updated.", "Username successfully updated.");
             }
             else
             {
-                model.Message = "Please ensure to fill out the usename";
+                model.Message = _stringResourceProvider.GetValue("Commenting App - Please ensure to fill out the usename.", "Please ensure to fill out the usename.");
             }
 
             TempData["message"] = model.Message;
@@ -65,7 +67,7 @@ namespace MrCMS.Web.Apps.Commenting.Controllers
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
 
-            return Json("Username already registered.", JsonRequestBehavior.AllowGet);
+            return Json(_stringResourceProvider.GetValue("Commenting App - Username already registered.", "Username already registered."), JsonRequestBehavior.AllowGet);
         }
     }
 }
