@@ -10,7 +10,7 @@
                 @Html.TextBoxFor(x => x.Username, new { @class = "form-control" })
                 @Html.ValidationMessageFor(x => x.Username)
             </div>
-            <input class="btn btn-primary" value="Save Username" type="submit" />
+            <button type="submit" class="btn btn-primary">@Resource("Save Changes")</button>
         </div>
     </div>
 }
