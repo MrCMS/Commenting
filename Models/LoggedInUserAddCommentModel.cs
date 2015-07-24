@@ -5,6 +5,10 @@ namespace MrCMS.Web.Apps.Commenting.Models
 {
     public class LoggedInUserAddCommentModel : IAddCommentModel
     {
+        public LoggedInUserAddCommentModel()
+        {
+            ReplyNotification = true;
+        }
         public int WebpageId { get; set; }
 
         public int? InReplyTo { get; set; }
