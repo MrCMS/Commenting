@@ -60,9 +60,9 @@ namespace MrCMS.Web.Apps.Commenting.Controllers
             return _uniquePageService.RedirectTo<UserAccountPage>();
         }
 
-        public JsonResult IsUniqueUsername(string commentingUsername, int? id)
+        public JsonResult IsUniqueUsername(string username, int? id)
         {
-            if (_uniqueUsernameService.IsUniqueUsername(commentingUsername, id))
+            if (_uniqueUsernameService.IsUniqueUsername(username, id))
             {
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
