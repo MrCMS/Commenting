@@ -26,7 +26,8 @@ namespace MrCMS.Web.Apps.Commenting.Services
             {
                 queryOver = queryOver.Where(x => x.Id != id.Value);
             }
-            return queryOver.Any();
+            var isUniqueUsername = !queryOver.Any();
+            return isUniqueUsername;
         }
     }
 }
