@@ -21,6 +21,11 @@ namespace MrCMS.Web.Apps.Commenting.Models
 
     public class GuestAddCommentModel : IAddCommentModel
     {
+        public GuestAddCommentModel()
+        {
+            ReplyNotification = true;
+        }
+
         public int WebpageId { get; set; }
         public int? InReplyTo { get; set; }
         [DisplayName("Notify me when people reply")]

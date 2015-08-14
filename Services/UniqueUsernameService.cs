@@ -21,11 +21,13 @@ namespace MrCMS.Web.Apps.Commenting.Services
         /// <returns></returns>
         public bool IsUniqueUsername(string username, int? id = null)
         {
+            var queryOver = _session.QueryOver<CommentsInfo>().Where(x => x.Username == username);
             if (id.HasValue)
             {
-                return !_session.QueryOver<CommentsInfo>().Where(x => x.Username == username && x.Id != id.Value).Any();
+                queryOver = queryOver.Where(x => x.Id != id.Value);
             }
-            return !_session.QueryOver<CommentsInfo>().Where(x => x.Username == username).Any();
+            var isUniqueUsername = !queryOver.Any();
+            return isUniqueUsername;
         }
     }
 }
