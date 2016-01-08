@@ -82,9 +82,9 @@
 }
 
 .comment-body p {
-    color: #000000;
+    color: #333;
     margin: 0 0 5px 0;
-    line-height: 15px;
+    line-height: 21px;
 }
 
 .comments-container h4 {
