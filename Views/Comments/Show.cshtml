@@ -1,18 +1,228 @@
-﻿@model List<MrCMS.Web.Apps.Commenting.Entities.Comment>
+﻿@using System.Web.Mvc.Html
+@using MrCMS.Helpers
+@using MrCMS.Web.Apps.Commenting.Helpers
+@using MrCMS.Web.Apps.Commenting.Models
+@using MrCMS.Web.Apps.Commenting.Services
+@using MrCMS.Web.Apps.Commenting.Settings
+@using MrCMS.Web.Apps.Core.Pages
+@using MrCMS.Website
+@using StackExchange.Profiling
+@model MrCMS.Web.Apps.Commenting.Services.CommentTreeData
+@{
+    var settings = SiteSettings<CommentingSettings>();
+}
 <div class="margin-top-15">
     <h4>@Resource("Comments")</h4>
 </div>
 
-@if (!Model.Any())
+@if (!Model.AllComments.Any())
 {
     <p>@Resource("No comments have been made yet.")</p>
 }
 else
 {
     <ul class="media-list">
-        @foreach (var comment in Model)
+        @foreach (var comment in Model.RootComments)
         {
-            Html.RenderPartial("ShowComment", comment);
+            @RenderComment(Model.GetRenderInfo(comment, 0), settings)
         }
     </ul>
+}
+
+@helper RenderComment(CommentTreeData.CommentRenderInfo info, CommentingSettings settings)
+{
+using (MiniProfiler.Current.Step("Render comment - " + info.Comment.Id))
+{
+    var comment = info.Comment;
+    var maxDepth = settings.MaxUINestingDepth;
+        <li class="post" data-post="true" itemprop="comment" itemscope itemtype="http://schema.org/UserComments">
+            <div class="padding-15 comment-background">
+                <div class="comment-container media-body media-body-comments">
+                    <div class="comment-header">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <p class="author line-height-30" itemprop="creator">
+                                    <span>
+                                        <strong>
+                                            @comment.Name
+                                        </strong>
+                                    </span> - @comment.CreatedOn.ToString("g")
+                                </p>
+                            </div>
+                            <div class="col-sm-2 text-right">
+                                <ul class="list-inline comment-actions reply">
+                                    <li><a data-show-hide-comment="true"><span class="glyphicon glyphicon-minus"></span></a></li>
+                                    <li>
+                                        @using (Html.BeginForm("Report", "CommentReporting", new { CommentId = comment.Id }, FormMethod.Post, new { @class = "inline" }))
+                                        {
+                                            <a href="#" data-link-action="true"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+                                        }
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment-body">
+                        <a name="@comment.Id"></a>
+                        <p itemprop="commentText">
+                            @Html.Raw(comment.Message)
+                        </p>
+                    </div>
+                    <div class="comment-footer">
+                        <ul class="list-inline comment-actions" data-votes="@comment.Id">
+                            @*@{Html.RenderAction("Votes", "Comments", new { comment = data });}*@
+                            @RenderVotes(info, settings)
+                            @if (CurrentRequestData.CurrentUser != null || settings.AllowGuestComments)
+                            {
+                                <li class="reply-container">
+                                    <a class="btn btn-default reply" data-show-reply-to="@comment.Id">@Resource("Reply")</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="comment-post" data-reply-to="@comment.Id">
+                        @using (MiniProfiler.Current.Step("Reply"))
+                        {
+                            if (info.CurrentUser != null)
+                            {
+                                //Html.RenderPartial("LoggedInReply", new LoggedInUserAddCommentModel
+                                //{
+                                //    InReplyTo = comment.Id,
+                                //    WebpageId = info.Webpage.Id
+                                //});
+                                @RenderLoggedInReply(info)
+                            }
+                            else if (settings.AllowGuestComments)
+                            {
+                                Html.RenderPartial("GuestReply", new GuestAddCommentModel
+                                {
+                                    InReplyTo = comment.Id,
+                                    WebpageId = info.Webpage.Id,
+                                });
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+            @{
+                var children = info.TreeData.InReplyTo(comment.Id).ToList();
+            }
+            @if (children.Any())
+            {
+                <ul class="media-list @(info.Depth < maxDepth ? "child" : "")">
+                    @foreach (var child in children)
+                    {
+                        @RenderComment(info.TreeData.GetRenderInfo(child, info.Depth + 1), settings)
+                    }
+                </ul>
+            }
+        </li>
+                }
+}
+@helper RenderVotes(CommentTreeData.CommentRenderInfo info, CommentingSettings settings)
+{
+if (settings.AllowVoting)
+{
+        <li class="comment-upvote">
+            @using (Html.BeginForm("Upvote", "CommentVoting", new { CommentId = info.Comment.Id }, FormMethod.Post, new { @class = "inline" }))
+        {
+                @info.Upvotes<text>&nbsp;</text>
+                <a href="#" data-link-action="true"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></a>
+            }
+        </li>
+        <li class="comment-downvote">
+            @using (Html.BeginForm("Downvote", "CommentVoting", new { CommentId = info.Comment.Id }, FormMethod.Post, new { @class = "inline" }))
+        {
+                @info.Downvotes<text>&nbsp;</text>
+                <a href="#" data-link-action="true"><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></a>
+            }
+        </li>
+}
+}
+@helper RenderLoggedInReply(CommentTreeData.CommentRenderInfo info)
+{
+var username = info.CurrentUser.GetCommentsInfo().Username;
+if (!string.IsNullOrWhiteSpace(username))
+{
+        <h4>Reply as <a href="@(UniquePageHelper.GetUrl<UserAccountPage>())">@username</a></h4>
+    using (Html.BeginForm("LoggedIn", "Comments", new { webpageId = info.Webpage.Id, inReplyTo = info.Comment.Id }, FormMethod.Post, new { @class = "add-comment" }))
+    {
+            @Html.AntiForgeryToken()
+            @Html.Honeypot()
+            <div class="form-group">
+                @Html.TextBox("Message", "", new { @class = "form-control inline-reply", data_val = "true", data_val_required = "The message is required", })
+                @Html.ValidationMessage("Message")
+                @*@Html.TextAreaFor(model => model.Message, new { @class = "form-control inline-reply" })
+                    @Html.ValidationMessageFor(model => model.Message)*@
+            </div>
+            <div class="row comments-notification">
+                <div class="col-sm-6">
+                    @Html.CheckBox("ReplyNotification") @Resource("Notify me when people reply")
+                    @*@Html.InlineCheckboxFor(model => model.ReplyNotification)*@
+                </div>
+                <div class="col-sm-6 text-right">
+                    <input type="submit" class="btn btn-primary" value="@Resource("Post")" />
+                </div>
+            </div>
+    }
+}
+else
+{
+        <div class="alert alert-danger" role="alert">
+            No commenting username, please create a username <a href="@(UniquePageHelper.GetUrl<UserAccountPage>())">here</a>.
+        </div>
+}
+}
+
+@helper RenderGuestReply(CommentTreeData.CommentRenderInfo info)
+{
+    <h4>Reply as guest</h4>
+using (Html.BeginForm("Guest", "Comments", new { webpageId = info.Webpage.Id, inReplyTo = info.Comment.Id }, FormMethod.Post, new { @class = "add-comment" }))
+{
+        @Html.AntiForgeryToken()
+        @Html.Honeypot()
+        <div class="form-group">
+            @Html.TextBox("Message", "", new { @class = "form-control input-block-level", rows = 3, data_val = "true", data_val_required = "The message is required", })
+            @Html.ValidationMessage("Message")
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.Label("Name")
+                    @Html.TextBox("Name", "", new { @class = "input-block-level form-control", data_val = "true", data_val_required = "The Name field is required." })
+                    @Html.ValidationMessage("Name")
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @*@Html.LabelFor(model => model.Email)
+                        @Html.TextBoxFor(model => model.Email, new { @class = "input-block-level form-control" })
+                        @Html.ValidationMessageFor(model => model.Email)*@
+                    @Html.Label("Email", "Email (will not be shown)")
+                    @Html.TextBox("Email", "", new { @class = "input-block-level form-control", data_val = "true", data_val_required = "The Email (will not be shown) field is required.", data_val_regex = "Please enter a valid email.", data_val_regex_pattern = "^\b[a-zA-Z0-9._%'+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}\b$" })
+                    @Html.ValidationMessage("Email")
+                </div>
+            </div>
+        </div>
+        <div class="row comments-notification">
+            <div class="col-sm-6">
+                @Html.RenderRecaptcha(id: "reply-recaptcha-" + info.Comment.Id)
+            </div>
+            <div class="col-sm-6 text-right">
+                @*@Html.InlineCheckboxFor(model => model.ReplyNotification)*@
+                    @Html.CheckBox("ReplyNotification") @Resource("Notify me when people reply")
+                <span class="notloggedin-actions">
+                    <a href="@(UniquePageHelper.GetUrl<LoginPage>(new {returnUrl = CurrentRequestData.CurrentPage.LiveUrlSegment}))" class="btn-link">Login</a>
+                    <span>&nbsp;/&nbsp;</span>
+                    <a href="@(UniquePageHelper.GetUrl<RegisterPage>(new {returnUrl = CurrentRequestData.CurrentPage.LiveUrlSegment}))" class="btn-link">Register</a>
+                </span>
+                <br />
+                <input type="submit" class="btn btn-primary" value="@Resource("Post as Guest")" />
+            </div>
+        </div>
+        <div class="clearfix"></div>
+}
+
 }
