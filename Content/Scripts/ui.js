@@ -33,9 +33,11 @@
         $('[data-reply-to=' + id + ']').show();
         var recaptchaId = 'reply-recaptcha-' + id;
         var object = $('#' + recaptchaId);
-        grecaptcha.render(recaptchaId, {
-            sitekey: object.data('sitekey')
-        });
+        if (object.length) {
+            grecaptcha.render(recaptchaId, {
+                sitekey: object.data('sitekey')
+            });
+        }
         //object.attr('data-recaptcha', captchaId);
     };
     function hideReplyTo(event) {

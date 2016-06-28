@@ -31,6 +31,7 @@ else
 
 @helper RenderComment(CommentTreeData.CommentRenderInfo info, CommentingSettings settings)
 {
+
 using (MiniProfiler.Current.Step("Render comment - " + info.Comment.Id))
 {
     var comment = info.Comment;
@@ -85,20 +86,11 @@ using (MiniProfiler.Current.Step("Render comment - " + info.Comment.Id))
                         {
                             if (info.CurrentUser != null)
                             {
-                                //Html.RenderPartial("LoggedInReply", new LoggedInUserAddCommentModel
-                                //{
-                                //    InReplyTo = comment.Id,
-                                //    WebpageId = info.Webpage.Id
-                                //});
                                 @RenderLoggedInReply(info)
                             }
                             else if (settings.AllowGuestComments)
                             {
-                                Html.RenderPartial("GuestReply", new GuestAddCommentModel
-                                {
-                                    InReplyTo = comment.Id,
-                                    WebpageId = info.Webpage.Id,
-                                });
+                                @RenderGuestReply(info)
                             }
                         }
                     </div>
@@ -143,7 +135,8 @@ if (settings.AllowVoting)
 }
 @helper RenderLoggedInReply(CommentTreeData.CommentRenderInfo info)
 {
-var username = info.CurrentUser.GetCommentsInfo().Username;
+    var username = info.CurrentUser.GetCommentsInfo().Username;
+    var htmlHelper = Html.For<LoggedInUserAddCommentModel>();
 if (!string.IsNullOrWhiteSpace(username))
 {
         <h4>Reply as <a href="@(UniquePageHelper.GetUrl<UserAccountPage>())">@username</a></h4>
@@ -152,15 +145,12 @@ if (!string.IsNullOrWhiteSpace(username))
             @Html.AntiForgeryToken()
             @Html.Honeypot()
             <div class="form-group">
-                @Html.TextBox("Message", "", new { @class = "form-control inline-reply", data_val = "true", data_val_required = "The message is required", })
-                @Html.ValidationMessage("Message")
-                @*@Html.TextAreaFor(model => model.Message, new { @class = "form-control inline-reply" })
-                    @Html.ValidationMessageFor(model => model.Message)*@
+                @htmlHelper.TextAreaFor(model => model.Message, new { @class = "form-control inline-reply" })
+                    @htmlHelper.ValidationMessageFor(model => model.Message)
             </div>
             <div class="row comments-notification">
                 <div class="col-sm-6">
-                    @Html.CheckBox("ReplyNotification") @Resource("Notify me when people reply")
-                    @*@Html.InlineCheckboxFor(model => model.ReplyNotification)*@
+                    @htmlHelper.InlineCheckboxFor(model => model.ReplyNotification)
                 </div>
                 <div class="col-sm-6 text-right">
                     <input type="submit" class="btn btn-primary" value="@Resource("Post")" />
@@ -178,31 +168,29 @@ else
 
 @helper RenderGuestReply(CommentTreeData.CommentRenderInfo info)
 {
+    var htmlHelper = Html.For<GuestAddCommentModel>();
     <h4>Reply as guest</h4>
 using (Html.BeginForm("Guest", "Comments", new { webpageId = info.Webpage.Id, inReplyTo = info.Comment.Id }, FormMethod.Post, new { @class = "add-comment" }))
 {
         @Html.AntiForgeryToken()
         @Html.Honeypot()
         <div class="form-group">
-            @Html.TextBox("Message", "", new { @class = "form-control input-block-level", rows = 3, data_val = "true", data_val_required = "The message is required", })
-            @Html.ValidationMessage("Message")
+        @htmlHelper.TextAreaFor(model => model.Message, new { @class = " form-control input-block-level", rows = 3 })
+        @htmlHelper.ValidationMessageFor(model => model.Message)
         </div>
         <div class="row">
             <div class="col-lg-6">
                 <div class="form-group">
-                    @Html.Label("Name")
-                    @Html.TextBox("Name", "", new { @class = "input-block-level form-control", data_val = "true", data_val_required = "The Name field is required." })
-                    @Html.ValidationMessage("Name")
+                    @htmlHelper.LabelFor(model => model.Name)
+                    @htmlHelper.TextBoxFor(model => model.Name, new { @class = "input-block-level form-control" })
+                    @htmlHelper.ValidationMessageFor(model => model.Name)
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="form-group">
-                    @*@Html.LabelFor(model => model.Email)
-                        @Html.TextBoxFor(model => model.Email, new { @class = "input-block-level form-control" })
-                        @Html.ValidationMessageFor(model => model.Email)*@
-                    @Html.Label("Email", "Email (will not be shown)")
-                    @Html.TextBox("Email", "", new { @class = "input-block-level form-control", data_val = "true", data_val_required = "The Email (will not be shown) field is required.", data_val_regex = "Please enter a valid email.", data_val_regex_pattern = "^\b[a-zA-Z0-9._%'+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}\b$" })
-                    @Html.ValidationMessage("Email")
+                    @htmlHelper.LabelFor(model => model.Email)
+                    @htmlHelper.TextBoxFor(model => model.Email, new { @class = "input-block-level form-control" })
+                    @htmlHelper.ValidationMessageFor(model => model.Email)
                 </div>
             </div>
         </div>
@@ -211,8 +199,7 @@ using (Html.BeginForm("Guest", "Comments", new { webpageId = info.Webpage.Id, in
                 @Html.RenderRecaptcha(id: "reply-recaptcha-" + info.Comment.Id)
             </div>
             <div class="col-sm-6 text-right">
-                @*@Html.InlineCheckboxFor(model => model.ReplyNotification)*@
-                    @Html.CheckBox("ReplyNotification") @Resource("Notify me when people reply")
+                @htmlHelper.InlineCheckboxFor(model => model.ReplyNotification)
                 <span class="notloggedin-actions">
                     <a href="@(UniquePageHelper.GetUrl<LoginPage>(new {returnUrl = CurrentRequestData.CurrentPage.LiveUrlSegment}))" class="btn-link">Login</a>
                     <span>&nbsp;/&nbsp;</span>
