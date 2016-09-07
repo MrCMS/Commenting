@@ -1,5 +1,6 @@
 using MrCMS.Entities.Documents.Web;
 using MrCMS.Web.Apps.Commenting.Entities;
+using MrCMS.Website;
 using NHibernate;
 
 namespace MrCMS.Web.Apps.Commenting.Services
@@ -17,9 +18,12 @@ namespace MrCMS.Web.Apps.Commenting.Services
         {
             if (webpage == null)
                 return null;
+
+            if (CurrentRequestData.CurrentSite == null)
+                return null;
             return
                 _session.QueryOver<CommentingInfo>()
-                    .Where(info => info.Webpage.Id == webpage.Id)
+                    .Where(info => info.Webpage.Id == webpage.Id && CurrentRequestData.CurrentSite.Id == info.Site.Id)
                     .Cacheable()
                     .SingleOrDefault();
         }
