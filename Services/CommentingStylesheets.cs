@@ -7,7 +7,8 @@ namespace MrCMS.Web.Apps.Commenting.Services
     {
         public IEnumerable<string> UIStylesheets
         {
-            get { yield return "~/Apps/Commenting/Content/Styles/commenting.css"; }
+            //get { yield return "~/Apps/Commenting/Content/Styles/commenting.css"; }
+            get { yield break; }
         }
 
         public IEnumerable<string> AdminStylesheets
