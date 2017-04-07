@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 using MrCMS.Entities.Documents.Web;
+using MrCMS.Helpers;
 using MrCMS.Web.Apps.Commenting.Entities;
 using MrCMS.Web.Apps.Commenting.Settings;
 
@@ -20,7 +21,7 @@ namespace MrCMS.Web.Apps.Commenting.Helpers
                 return commentingInfo.CommentingEnabledStatus == CommentingEnabledStatus.Enabled;
             }
 
-            return settings.AllowedTypes.Contains(webpage.GetType());
+            return settings.AllowedTypes.Contains(webpage.Unproxy().GetType());
         }
     }
 
