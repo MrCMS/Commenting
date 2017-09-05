@@ -39,9 +39,9 @@
                 @Html.InlineCheckboxFor(model => model.ReplyNotification)
                 <br />
                 <span class="notloggedin-actions">
-                    <a href="@(UniquePageHelper.GetUrl<LoginPage>(new {returnUrl = CurrentRequestData.CurrentPage.LiveUrlSegment}))" class="btn-link" rel="nofollow">@Resource("Login")</a>
+                    <a href="@(UniquePageHelper.GetUrl<LoginPage>(new {returnUrl = CurrentRequestData.CurrentPage.LiveUrlSegment}))" class="btn-link">@Resource("Login")</a>
                     <span>&nbsp;/&nbsp;</span>
-                    <a href="@(UniquePageHelper.GetUrl<RegisterPage>(new {returnUrl = CurrentRequestData.CurrentPage.LiveUrlSegment}))" class="btn-link" rel="nofollow">@Resource("Register")</a>
+                    <a href="@(UniquePageHelper.GetUrl<RegisterPage>(new {returnUrl = CurrentRequestData.CurrentPage.LiveUrlSegment}))" class="btn-link">@Resource("Register")</a>
                 </span>
                 <br/>
                 <input type="submit" class="btn btn-primary" value="@Resource("Post as Guest")" />
