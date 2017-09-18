@@ -37,7 +37,7 @@ namespace MrCMS.Web.Apps.Commenting.MessageTemplates.TokenProviders
                 {"CommentNotificationName", comment => comment.InReplyTo != null ? comment.InReplyTo.Name : null},
                 {"CommentUnsubscribeUrl", comment => comment.InReplyTo != null ? string.Format("{0}?guid={1}", _uniquePageService.GetUniquePage<UnsubscribeFromCommentReplies>()?.AbsoluteUrl, comment.InReplyTo.Guid) : null},
                 {"CommentModerationUrl", 
-                    comment => string.Format("http://{0}/Admin/Apps/Commenting/Comment?Id={1}", _site.BaseUrl, comment.Id)}
+                    comment => string.Format("https://{0}/Admin/Apps/Commenting/Comment?Id={1}", _site.BaseUrl, comment.Id)}
             };
         }
     }
