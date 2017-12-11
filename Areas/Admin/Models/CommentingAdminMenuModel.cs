@@ -38,6 +38,8 @@ namespace MrCMS.Web.Apps.Commenting.Areas.Admin.Models
             {
                 new ChildMenuItem("Comments", _urlHelper.Action("Index", "Comment"),
                     ACLOption.Create(_commentingAdminACL, CommentingAdminACL.ViewComments)),
+                new ChildMenuItem("Reported Comments", _urlHelper.Action("Index", "ReportedComment"),
+                    ACLOption.Create(_commentingAdminACL, CommentingAdminACL.ViewComments)),
                 new ChildMenuItem("Settings", _urlHelper.Action("Index", "CommentingSettings"),
                     ACLOption.Create(_commentingAdminACL, CommentingAdminACL.EditSettings))
             };

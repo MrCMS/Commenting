@@ -1,7 +1,10 @@
+using MrCMS.Entities.People;
+using MrCMS.Helpers;
 using MrCMS.Services;
 using MrCMS.Web.Apps.Commenting.Entities;
 using MrCMS.Web.Apps.Commenting.Events;
 using MrCMS.Web.Apps.Commenting.Models;
+using MrCMS.Website;
 using NHibernate;
 
 namespace MrCMS.Web.Apps.Commenting.Services
@@ -28,6 +31,17 @@ namespace MrCMS.Web.Apps.Commenting.Services
                        };
             }
 
+            var reportedComment = new ReportedComment
+            {
+                Comment = comment
+            };
+
+            User currentUser = CurrentRequestData.CurrentUser;
+            if (currentUser != null)
+                reportedComment.User = currentUser;
+            else
+                reportedComment.IPAddress = reportModel.IPAddress;
+            _session.Transact(session => session.Save(reportedComment));
             EventContext.Instance.Publish<IOnCommentReported, CommentReportedEventArgs>(
                 new CommentReportedEventArgs(comment));
 
