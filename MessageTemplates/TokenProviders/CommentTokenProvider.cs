@@ -57,7 +57,7 @@ namespace MrCMS.Web.Apps.Commenting.MessageTemplates.TokenProviders
                         else if (!string.IsNullOrWhiteSpace(reportedComment.IPAddress))
                             reportedCommentDetails +=
                                 $"The comment has been reported via this IP address: " + reportedComment.IPAddress + "</br></br>";
-                        reportedCommentDetails += $"<a href=\"https://{_site.BaseUrl}/admin/apps/commenting/reportedcomment/show/{reportedComment.Id}\">Reported comment details</a>";
+                        reportedCommentDetails += $"<a href=\"https://{_site.BaseUrl}/admin/apps/commenting/reportedcomment/show/{reportedComment.Id}\" target='_blank'>Reported comment details</a>";
                         return reportedCommentDetails;
                     }
                 }
