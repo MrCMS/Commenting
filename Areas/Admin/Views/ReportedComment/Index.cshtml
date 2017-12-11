@@ -1,0 +1,48 @@
+﻿@using MrCMS.Helpers
+@using MrCMS.Paging
+@using MrCMS.Web.Apps.Commenting.Entities
+@using MrCMS.Web.Apps.Rail.Entities
+@model MrCMS.Web.Apps.Commenting.Areas.Admin.Models.ReportedCommentSearchQuery
+@{
+    var results = ViewData["results"] as IPagedList<ReportedComment> ?? PagedList<ReportedComment>.Empty;
+}
+<fieldset>
+    <legend>
+        Reported Comments
+    </legend>
+    @if (results.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-condensed table-striped">
+                <thead>
+                <tr>
+                    <th>Webpages</th>
+                    <th>Created On</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var reportedComment in results)
+                {
+                    <tr>
+                        <td>@reportedComment.Comment.Webpage.Name</td>
+                        <td>@reportedComment.CreatedOn</td>
+                        <td>
+                            <div class="btn-group">
+                                @Html.ActionLink("View", "Show", "ReportedComment", new { id = reportedComment.Id}, new { @class = "btn btn-xs btn-default" })
+                            </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+        @Html.Pager(results, "Index", page => new { page })
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No reported comments to show.
+        </div>
+    }
+</fieldset>

@@ -1,0 +1,49 @@
+﻿@model MrCMS.Web.Apps.Commenting.Entities.ReportedComment
+<fieldset>
+    <legend>
+        Reported Comment
+        <span class="pull-right btn-group">
+            @Html.ActionLink("Back to list", "Index", "ReportedComment", null, new { @class = "btn btn-primary" })
+        </span>
+    </legend>
+    <table class="table table-bordered">
+        <tr>
+            <td>
+                @Resource("Webpage")
+            </td>
+            <td>
+                <a href="/Admin/Webpage/Edit/@Model.Comment.Webpage.Id">@Model.Comment.Webpage.Name</a>
+            </td>
+        </tr>
+        @if (Model.User != null)
+        {
+            <tr>
+                <td>
+                    @Resource("User")
+                </td>
+                <td>
+                    <a href="/Admin/User/Edit/@Model.User.Id">@Model.User.Email</a>
+                </td>
+            </tr>
+        }
+        else if (!string.IsNullOrWhiteSpace(Model.IPAddress))
+        {
+            <tr>
+                <td>
+                    @Resource("IP address")
+                </td>
+                <td>
+                    @Model.IPAddress
+                </td>
+            </tr>
+        }
+        <tr>
+            <td>
+                @Resource("Reported on")
+            </td>
+            <td>
+                @Model.CreatedOn.ToString("dd/MM/yyyy")
+            </td>
+        </tr>
+    </table>
+</fieldset>
