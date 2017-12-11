@@ -19,7 +19,7 @@ namespace MrCMS.Web.Apps.Commenting.Areas.Admin.Services
         public IPagedList<ReportedComment> Search(ReportedCommentSearchQuery query)
         {
             var reportedComments = _session.QueryOver<ReportedComment>();
-            return reportedComments.OrderBy(x => x.Id).Asc.Paged(query.Page);
+            return reportedComments.OrderBy(x => x.Id).Desc.Paged(query.Page);
         }
     }
 }
