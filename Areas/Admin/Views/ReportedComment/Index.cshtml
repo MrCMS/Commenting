@@ -17,7 +17,10 @@
                 <thead>
                 <tr>
                     <th>Webpages</th>
-                    <th>Created On</th>
+                    <th>User</th>
+                    <th>IP address
+                    </th>
+                    <th>Created on</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -25,7 +28,19 @@
                 @foreach (var reportedComment in results)
                 {
                     <tr>
-                        <td>@reportedComment.Comment.Webpage.Name</td>
+                        <td><a href="/Admin/Webpage/Edit/@reportedComment.Comment.Webpage.Id">@reportedComment.Comment.Webpage.Name</a></td>
+                        <td>
+                            @if (reportedComment.User != null)
+                            {
+                                <a href="/Admin/User/Edit/@reportedComment.User.Id">@reportedComment.User.Email</a>
+                            }
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(reportedComment.IPAddress))
+                            {
+                                @reportedComment.IPAddress
+                            }
+                        </td>
                         <td>@reportedComment.CreatedOn</td>
                         <td>
                             <div class="btn-group">
