@@ -16,7 +16,7 @@ namespace MrCMS.Web.Apps.Commenting.MessageTemplates
                 Bcc = String.Empty,
                 Cc = String.Empty,
                 Subject = "A Comment Reported - #{Id}",
-                Body = "<p>Comment #{Id} on <a href=\"{PageUrl}\">{PageName}</a> has been reported.</p><p><a href=\"{CommentModerationUrl}\">Comment Moderation</a></p>",
+                Body = "<p>Comment #{Id} on <a href=\"{PageUrl}\">{PageName}</a> has been reported.</p><p><a href=\"{CommentModerationUrl}\">Comment Moderation</a></p><p>It has been reported by: {ReportedCommentDetails}</p>",
                 IsHtml = true
             };
         }
