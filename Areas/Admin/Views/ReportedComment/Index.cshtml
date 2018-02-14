@@ -1,7 +1,6 @@
 ﻿@using MrCMS.Helpers
 @using MrCMS.Paging
 @using MrCMS.Web.Apps.Commenting.Entities
-@using MrCMS.Web.Apps.Rail.Entities
 @model MrCMS.Web.Apps.Commenting.Areas.Admin.Models.ReportedCommentSearchQuery
 @{
     var results = ViewData["results"] as IPagedList<ReportedComment> ?? PagedList<ReportedComment>.Empty;

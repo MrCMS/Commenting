@@ -142,7 +142,6 @@ if (!string.IsNullOrWhiteSpace(username))
         <h4>Reply as <a href="@(UniquePageHelper.GetUrl<UserAccountPage>())">@username</a></h4>
     using (Html.BeginForm("LoggedIn", "Comments", new { webpageId = info.Webpage.Id, inReplyTo = info.Comment.Id }, FormMethod.Post, new { @class = "add-comment" }))
     {
-            @Html.AntiForgeryToken()
             @Html.Honeypot()
             <div class="form-group">
                 @htmlHelper.TextAreaFor(model => model.Message, new { @class = "form-control inline-reply" })
@@ -172,7 +171,6 @@ else
     <h4>Reply as guest</h4>
 using (Html.BeginForm("Guest", "Comments", new { webpageId = info.Webpage.Id, inReplyTo = info.Comment.Id }, FormMethod.Post, new { @class = "add-comment" }))
 {
-        @Html.AntiForgeryToken()
         @Html.Honeypot()
         <div class="form-group">
         @htmlHelper.TextAreaFor(model => model.Message, new { @class = " form-control input-block-level", rows = 3 })

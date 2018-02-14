@@ -9,7 +9,6 @@
     <h4>@Resource("Comment as guest")</h4>
     @using (Html.BeginForm("Guest", "Comments", new { Model.WebpageId }, FormMethod.Post, new { @class = "add-comment" }))
     {
-        @Html.AntiForgeryToken()
         @Html.Honeypot()
         <div class="form-group">
             @Html.TextAreaFor(model => model.Message, new { @class = "form-control", rows = 3 })

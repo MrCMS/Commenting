@@ -43,8 +43,8 @@ namespace MrCMS.Web.Apps.Commenting.Controllers
         }
 
         [HttpPost]
-        [AntiForgeryValidation]
         [GoogleReCaptcha]
+        [DoNotCache]
         public ActionResult Guest([IoCModelBinder(typeof(SetIPAddressModelBinder))]GuestAddCommentModel model)
         {
             if (ModelState.IsValid)
@@ -56,7 +56,6 @@ namespace MrCMS.Web.Apps.Commenting.Controllers
         }
 
         [HttpPost]
-        [AntiForgeryValidation]
         public ActionResult LoggedIn([IoCModelBinder(typeof(SetIPAddressModelBinder))]LoggedInUserAddCommentModel model)
         {
             if (ModelState.IsValid)

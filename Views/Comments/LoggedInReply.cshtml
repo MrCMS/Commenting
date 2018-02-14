@@ -11,7 +11,6 @@
     <h4>Reply as <a href="@(UniquePageHelper.GetUrl<UserAccountPage>())">@username</a></h4>
     using (Html.BeginForm("LoggedIn", "Comments", new { Model.WebpageId, Model.InReplyTo }, FormMethod.Post, new { @class = "add-comment" }))
     {
-        @Html.AntiForgeryToken()
         @Html.Honeypot()
         <div class="form-group">
             @Html.TextAreaFor(model => model.Message, new { @class = "form-control inline-reply" })

@@ -13,7 +13,6 @@
         <h4>@Resource("Comment as") <a href="@(UniquePageHelper.GetUrl<UserAccountPage>())">@username</a> </h4>
         @using (Html.BeginForm("LoggedIn", "Comments", new { Model.WebpageId }, FormMethod.Post, new { @class = "add-comment" }))
         {
-            @Html.AntiForgeryToken()
             @Html.Honeypot()
             <div class="form-group">
                 @Html.TextAreaFor(model => model.Message, new { @class = "form-control", rows = 3 })

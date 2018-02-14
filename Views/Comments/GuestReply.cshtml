@@ -8,7 +8,6 @@
 <h4>Reply as guest</h4>
 @using (Html.BeginForm("Guest", "Comments", new { Model.WebpageId, Model.InReplyTo }, FormMethod.Post, new { @class = "add-comment" }))
 {
-    @Html.AntiForgeryToken()
     @Html.Honeypot()
     <div class="form-group">
         @Html.TextAreaFor(model => model.Message, new { @class = " form-control input-block-level", rows = 3 })
